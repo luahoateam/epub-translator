@@ -75,7 +75,11 @@ def clean_html(html: str) -> str:
         t.decompose()
     body = soup.body if soup.body else soup
     for tag in body.find_all():
-        if tag.name in ["span", "div"] and not tag.get_text(strip=True) and not tag.find(["img", "br"]):
+        if (
+            tag.name in ["span", "div"]
+            and not tag.get_text(strip=True)
+            and not tag.find(["img", "br"])
+        ):
             tag.decompose()
     return str(body)
 
@@ -178,7 +182,9 @@ st.success(f"Đã trích xuất **{len(chapters)}** chapter từ EPUB.")
 # ── Step 1: Chọn chapters ───────────────────────────────────────────────
 st.subheader("1️⃣ Chọn chapters để xử lý")
 labels = [f"{c.idx+1:03d} — {c.title}" for c in chapters]
-selected_labels = st.multiselect("Chapters", options=labels, default=labels[:min(5, len(labels))])
+selected_labels = st.multiselect(
+    "Chapters", options=labels, default=labels[: min(5, len(labels))]
+)
 selected = [chapters[labels.index(lbl)] for lbl in selected_labels]
 
 if not selected:
@@ -218,7 +224,9 @@ with col2:
 
 # ── Step 4: Review ───────────────────────────────────────────────────────
 st.subheader("4️⃣ Xem kết quả")
-ch_preview = st.selectbox("Chọn chapter để xem", selected, format_func=lambda x: f"{x.idx+1:03d} — {x.title}")
+ch_preview = st.selectbox(
+    "Chọn chapter để xem", selected, format_func=lambda x: f"{x.idx+1:03d} — {x.title}"
+)
 
 if ch_preview:
     md_key = cache_key(ch_preview, "md")
@@ -236,12 +244,16 @@ if ch_preview:
         if md_val:
             st.markdown(md_val)
             with st.expander("Xem/Sửa source Markdown"):
-                new_md = st.text_area("Markdown", value=md_val, height=300, key=f"edit_{md_key}")
+                new_md = st.text_area(
+                    "Markdown", value=md_val, height=300, key=f"edit_{md_key}"
+                )
                 if new_md != md_val:
                     st.session_state.md_cache[md_key] = new_md
                     if vi_key in st.session_state.vi_cache:
                         del st.session_state.vi_cache[vi_key]
-                    st.info("Đã cập nhật Markdown. Bản dịch cũ đã bị xóa, hãy dịch lại.")
+                    st.info(
+                        "Đã cập nhật Markdown. Bản dịch cũ đã bị xóa, hãy dịch lại."
+                    )
         else:
             st.info("Chưa chuyển đổi. Nhấn nút 'Chuyển đổi sang Markdown' ở trên.")
 
