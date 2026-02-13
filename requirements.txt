@@ -82,3 +82,4 @@ uritemplate==4.1.1
 urllib3==2.2.1
 yarl==1.9.4
 zipp==3.18.1
+streamlit>=1.31

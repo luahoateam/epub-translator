@@ -138,6 +138,7 @@ log/
 *.srt
 *.txt
 *.bin
+.streamlit/secrets.toml
 *.epub
 
 # For markdown files in user directories
